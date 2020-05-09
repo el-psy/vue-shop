@@ -9,6 +9,7 @@ import './plugin/element.js'
 import './assets/css/global.css'
 
 import axios from 'axios'
+import TreeTable from 'vue-table-with-tree-grid'
 
 // Vue.use(ElementUI)
 
@@ -21,6 +22,8 @@ axios.interceptors.request.use(config=>{
 Vue.prototype.$http=axios;
 
 Vue.config.productionTip = false
+
+Vue.component('tree-table', TreeTable);
 
 new Vue({
   router,
