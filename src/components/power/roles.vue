@@ -104,114 +104,114 @@
 
 <script>
 export default {
-  data() {
-    return {
-      roleList: [],
-      showRightDialogVisible: false,
-      rightsList: [],
-      treeProps: {
-        label: "authName",
-        children: "children"
-      },
-      defKeys: [],
-      roleId: ""
-    };
-  },
-  created() {
-    this.getRolesList();
-  },
-  methods: {
-    async getRolesList() {
-      const { data: res } = await this.$http.get("roles");
-      if (res.meta.status !== 200) {
-        return this.$message.error("获取角色列表失败");
-      }
-      this.roleList = res.data;
-      //   console.log(this.roleList);
-    },
-    async removeRightById(role, rightId) {
-      const confirmResult = await this.$confirm(
-        "此操作将永久删除该文件, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      ).catch(err => err);
-      //   console.log(confirmResult);
-      if (confirmResult !== "confirm") {
-        return this.$message.info("取消了删除");
-      }
-      console.log("确认了删除");
-      const { data: res } = await this.$http.delete(
-        `roles/${role.id}/rights/${rightId}`
-      );
-      if (res.meta.status !== 200)
-        return this.$message.error("删除角色权限失败");
-      this.$message.success("删除角色权限成功");
-      //   this.getRolesList();
-      role.children = res.data;
-    },
-    async showSetRightDialog(role) {
-      this.roleId = role.id;
-      const { data: res } = await this.$http.get("rights/tree");
-      if (res.meta.status !== 200)
-        return this.$message.error("获取权限数据失败");
-      this.rightsList = res.data;
-      //   console.log(this.rightsList);
-      this.getLeafKeys(role, this.defKeys);
-      //   console.log(this.defKeys);
-      this.showRightDialogVisible = true;
-    },
-    getLeafKeys(node, arr) {
-      if (!node.children) {
-        return arr.push(node.id);
-      } else {
-        node.children.forEach(item => {
-          this.getLeafKeys(item, arr);
-        });
-      }
-    },
-    setRightDialogClosed() {
-      this.defKeys = [];
-    },
-    async allotRights() {
-      const keys = [
-        ...this.$refs.treeRef.getCheckedKeys(),
-        ...this.$refs.treeRef.getHalfCheckedKeys()
-      ];
-      const idStr = keys.join(",");
-      const { data: res } = await this.$http.post(
-        `roles/${this.roleId}/rights`,
-        { rids: idStr }
-      );
-      if (res.meta.status !== 200) {
-        return this.$message.error("分配权限失败");
-      }
-      this.$message.success("分配权限成功");
-      this.getRolesList();
-      this.showRightDialogVisible = false;
-    }
-  }
+	data() {
+		return {
+			roleList: [],
+			showRightDialogVisible: false,
+			rightsList: [],
+			treeProps: {
+				label: "authName",
+				children: "children"
+			},
+			defKeys: [],
+			roleId: ""
+		};
+	},
+	created() {
+		this.getRolesList();
+	},
+	methods: {
+		async getRolesList() {
+			const { data: res } = await this.$http.get("roles");
+			if (res.meta.status !== 200) {
+				return this.$message.error("获取角色列表失败");
+			}
+			this.roleList = res.data;
+			//   console.log(this.roleList);
+		},
+		async removeRightById(role, rightId) {
+			const confirmResult = await this.$confirm(
+				"此操作将永久删除该文件, 是否继续?",
+				"提示",
+				{
+					confirmButtonText: "确定",
+					cancelButtonText: "取消",
+					type: "warning"
+				}
+			).catch(err => err);
+			//   console.log(confirmResult);
+			if (confirmResult !== "confirm") {
+				return this.$message.info("取消了删除");
+			}
+			console.log("确认了删除");
+			const { data: res } = await this.$http.delete(
+				`roles/${role.id}/rights/${rightId}`
+			);
+			if (res.meta.status !== 200)
+				return this.$message.error("删除角色权限失败");
+			this.$message.success("删除角色权限成功");
+			//   this.getRolesList();
+			role.children = res.data;
+		},
+		async showSetRightDialog(role) {
+			this.roleId = role.id;
+			const { data: res } = await this.$http.get("rights/tree");
+			if (res.meta.status !== 200)
+				return this.$message.error("获取权限数据失败");
+			this.rightsList = res.data;
+			//   console.log(this.rightsList);
+			this.getLeafKeys(role, this.defKeys);
+			//   console.log(this.defKeys);
+			this.showRightDialogVisible = true;
+		},
+		getLeafKeys(node, arr) {
+			if (!node.children) {
+				return arr.push(node.id);
+			} else {
+				node.children.forEach(item => {
+					this.getLeafKeys(item, arr);
+				});
+			}
+		},
+		setRightDialogClosed() {
+			this.defKeys = [];
+		},
+		async allotRights() {
+			const keys = [
+				...this.$refs.treeRef.getCheckedKeys(),
+				...this.$refs.treeRef.getHalfCheckedKeys()
+			];
+			const idStr = keys.join(",");
+			const { data: res } = await this.$http.post(
+				`roles/${this.roleId}/rights`,
+				{ rids: idStr }
+			);
+			if (res.meta.status !== 200) {
+				return this.$message.error("分配权限失败");
+			}
+			this.$message.success("分配权限成功");
+			this.getRolesList();
+			this.showRightDialogVisible = false;
+		}
+	}
 };
 </script>
 
 <style lang="less" scoped>
 .el-tag {
-  margin: 7px;
+	margin: 7px;
 }
 
 .bdtop {
-  border-top: 1px solid #eee;
+	border-top: 1px solid #eee;
 }
 
 .bdbottom {
-  border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #eee;
 }
 
 .vcenter {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 </style>
