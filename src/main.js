@@ -17,6 +17,8 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
+import ECharts from 'vue-echarts/components/ECharts.vue'
+
 // Vue.use(ElementUI)
 
 Vue.use(VueQuillEditor);
