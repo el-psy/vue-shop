@@ -19,16 +19,28 @@ import 'quill/dist/quill.bubble.css'
 
 import ECharts from 'vue-echarts/components/ECharts.vue'
 
+import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // Vue.use(ElementUI)
 
 Vue.use(VueQuillEditor);
 
 axios.defaults.baseURL ='http://127.0.0.1:8888/api/private/v1/';
+
+
 axios.interceptors.request.use(config=>{
 	// console.log(config);
+	Nprogress.start();
 	config.headers.Authorization=window.sessionStorage.getItem('token');
 	return config;
 })
+
+axios.interceptors.response.use(config=>{
+	Nprogress.done();
+	return config;
+})
+
 Vue.prototype.$http=axios;
 
 Vue.config.productionTip = false
